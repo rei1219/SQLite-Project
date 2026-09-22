@@ -1,2 +1,4 @@
 out/
+db/*.db
 .vscode
+.open
