@@ -22,52 +22,13 @@ int main()
 	sqlite3 *db = nullptr;
 	int return_code = sqlite3_open(db_file.string().c_str(), &db);
 
-	if (db_check(db, db_file, return_code) == 1) { return 1; }
-
-	//	Adds basic SQL Table "Characters"
-	std::string SQL_create_char =
-		"CREATE TABLE IF NOT EXISTS Characters("
-		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
-		"name TEXT NOT NULL, "
-		"software TEXT NOT NULL);";
-
-	char *err_msg = nullptr;
-	return_code = sqlite3_exec
-		(
-			db,
-			SQL_create_char.c_str(),
-			nullptr,
-			nullptr,
-			&err_msg
-		);
-
-	sql_result_ok("sqlite3_exec", return_code, err_msg);
-
-	//	Insert SQL statement for Table "Characters"
-	sqlite3_stmt *stmt_insert_char;
-	std::string insert_char =
-		"INSERT INTO Characters (name, software)"
-		"VALUES (?, ?);";
-	return_code = sqlite3_prepare_v2(db, insert_char.c_str(), -1, &stmt_insert_char, nullptr);
-	if ( return_code != SQLITE_OK )
-		{
-			std::cerr << std::format("ERR_[sqlite3_prepare_v2]: {}\n", sqlite3_errmsg(db));
-			return 1;
-		}
-
-	// Inserts SQL values
-	sqlite3_bind_text(stmt_insert_char, 1, "Adachi Rei", -1, SQLITE_STATIC);
-	sqlite3_bind_text(stmt_insert_char, 2, "UTAU",		 -1, SQLITE_STATIC);
-
-	// Moves to next row
-	return_code = sqlite3_step(stmt_insert_char);
-	if ( return_code != SQLITE_DONE )
-		{
-			std::cerr << std::format("ERR_[sqlite3_step]: {}\n", sqlite3_errmsg(db));
-		}
-
-	// Finalizes statement, important otherwise risks memory leaks
-	sqlite3_finalize(stmt_insert_char);
+	if (db_check(db, db_file, return_code) == 1)
+		{ return 1; }
+		
+	if ( SQL_create_char(db) )
+		{ return 1; }
+	if ( SQL_insert_char(db) )
+		{ return 1; }
 
 	std::string select_char =
 		"SELECT *"
