@@ -161,7 +161,6 @@ bool SQL_update_char(sqlite3 *db)
 	sqlite3_bind_int(stmt, 2, 4);
 	sqlite3_bind_text(stmt, 2, "UTAU/SynthV2", -1, SQLITE_STATIC);
 	sqlite3_bind_int(stmt, 3, 4);
-	sqlite3_step(stmt);
 	
 	sqlite3_bind_text(stmt, 1, "Megpoid Gumi", -1, SQLITE_STATIC);
 	sqlite3_bind_int(stmt, 2, 5);
