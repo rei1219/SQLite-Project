@@ -9,6 +9,7 @@
 // Project Headers
 
 #include "sql.hpp"
+#include "data.cpp"
 
 // Macros and Declarations and stuff
 
@@ -28,6 +29,10 @@ int main()
 	if ( SQL_create_char(db) )
 		{ return 1; }
 	if ( SQL_insert_char(db) )
+		{ return 1; }
+	if ( SQL_update_char(db) )
+		{ return 1; }
+	if ( SQL_delete_char(db) )
 		{ return 1; }
 	if ( SQL_select_char(db) )
 		{ return 1; }

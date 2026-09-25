@@ -11,10 +11,12 @@
 bool SQL_create_char(sqlite3 *db);
 bool SQL_insert_char(sqlite3 *db);
 bool SQL_select_char(sqlite3 *db);
+bool SQL_update_char(sqlite3 *db);
+bool SQL_delete_char(sqlite3 *db);
 
 // sqlite3
 
-std::filesystem::path db_setup();
+std::filesystem::path db_setup(bool delete_file = true);
 
 int db_check(sqlite3 *db, const std::filesystem::path db_file, int result_code);
 
