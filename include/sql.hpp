@@ -10,6 +10,7 @@
 
 bool SQL_create_char(sqlite3 *db);
 bool SQL_insert_char(sqlite3 *db);
+bool SQL_select_char(sqlite3 *db);
 
 // sqlite3
 

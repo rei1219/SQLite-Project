@@ -40,7 +40,6 @@ bool SQL_insert_char(sqlite3 *db)
 		"INSERT INTO Characters (name, software)"
 		"VALUES (?, ?);";
 
-	char *err_msg = nullptr;
 	int return_code = sqlite3_prepare_v2
 		(
 			db,
@@ -57,6 +56,49 @@ bool SQL_insert_char(sqlite3 *db)
 	sqlite3_bind_text(stmt, 2, "UTAU",		 -1, SQLITE_STATIC);
 
 	return_code = sqlite3_step(stmt);
+
+	if ( sqlite_result_done(db, "sqlite3_step", return_code) )
+		{ return 1; }
+
+	sqlite3_finalize(stmt);
+
+	return 0;
+}
+
+bool SQL_select_char(sqlite3 *db)
+{
+	sqlite3_stmt *stmt;
+	
+	std::string sql =
+	"SELECT *"
+	"FROM Characters;";
+
+	int return_code = sqlite3_prepare_v2
+	(
+		db,
+		sql.c_str(),
+		-1,
+		&stmt,
+		nullptr
+	);
+
+	if ( sqlite_result_ok(db, "sqlite_prepare_v2", return_code) )
+		{ return 1; }
+
+	while ( (return_code = sqlite3_step(stmt)) == SQLITE_ROW )
+		{
+			int id = sqlite3_column_int(stmt, 0);
+			std::string name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+			std::string software = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+
+			std:: cout << std::format
+			(
+				"ID: {}, Name: {}, Software: {}",
+				id,
+				name,
+				software
+			);
+		}
 
 	if ( sqlite_result_done(db, "sqlite3_step", return_code) )
 		{ return 1; }
